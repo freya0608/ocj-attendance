@@ -18,6 +18,7 @@ const Fee = require('./models/fee');
 const Duty = require('./models/duty');
 const Leave = require('./models/leave');
 const User = require('./models/user');
+const Record = require('./models/record');
 
 
 app.use(statics(
