@@ -106,35 +106,35 @@ const useStyles2 = makeStyles(theme => ({
     },
 }));
 
-export default function DutyList() {
+export default function RecordList() {
     const classes = useStyles2();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(15);
 
-    const [duty,setDutyList] = useState({dutyList:[]});
+    const [record,setRecordList] = useState({recordList:[]});
     useEffect(()=>{
-        axios.get('/getDutyList',{params:{page:0}}).then(res=>{
+        axios.get('/getRecordList',{params:{page:0}}).then(res=>{
             // console.log(res)
-            setDutyList(oldValues => ({
+            setRecordList(oldValues => ({
                 ...oldValues,
-                dutyList:res.data.msg.rows,
+                recordList:res.data.msg.rows,
                 count:res.data.msg.count
             }));
         })
 
     },[]);
-    // console.log('duty',duty)
+    // console.log('Record',Record)
 
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, duty.count - page * rowsPerPage);
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, record.count - page * rowsPerPage);
 
     function handleChangePage(event, newPage) {
         console.log('newPage',newPage)
         setPage(newPage);
-        axios.get('/getDutyList',{params:{page:newPage}}).then(res=>{
+        axios.get('/getRecordList',{params:{page:newPage}}).then(res=>{
             // console.log(res)
-            setDutyList(oldValues => ({
+            setRecordList(oldValues => ({
                 ...oldValues,
-                dutyList:res.data.msg.rows,
+                recordList:res.data.msg.rows,
                 count:res.data.msg.count
             }));
         })
@@ -160,12 +160,10 @@ export default function DutyList() {
                     </TableHead>
                     <TableBody>
                         {/*.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)*/}
-                        {duty&&duty.dutyList&&duty.dutyList.map(row => (
+                        {record&&record.recordList&&record.recordList.map(row => (
                             <TableRow key={row.name}>
                                 <TableCell component="th" scope="row">{row.userId}</TableCell>
-                                <TableCell align="center">{moment(new Date(row.start)).format("YYYY-MM-DD HH:mm:ss")}</TableCell>
-                                <TableCell align="center">{moment(new Date(row.end)).format("YYYY-MM-DD HH:mm:ss")}</TableCell>
-                                <TableCell align="center">{row.time}</TableCell>
+                                <TableCell align="center">{moment(new Date(row.recordTime)).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
                                 <TableCell align="center">{moment(new Date(row.createdAt)).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
                             </TableRow>
                         ))}
@@ -181,11 +179,11 @@ export default function DutyList() {
                             <TablePagination
                                 rowsPerPageOptions={[15]}
                                 colSpan={3}
-                                count={duty.count}
+                                count={record.count}
                                 rowsPerPage={rowsPerPage}
                                 page={page}
                                 SelectProps={{
-                                    inputProps: { 'aria-label': 'duty.dutyList per page' },
+                                    inputProps: { 'aria-label': 'Record.RecordList per page' },
                                     native: true,
                                 }}
                                 onChangePage={handleChangePage}

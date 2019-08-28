@@ -1,58 +1,66 @@
-/**
- * Created by ${USER} on ${DATE}.
- * https://www.jetbrains.com/help/webstorm/file-template-variables.html
- 动画callback只支持1.x版本的TransitionGroup
- */
-import React,{Component} from 'react';
-import './add-record.css';
-const styles = {
-    container: {}
-};
-//import ReactDOM from 'react-dom';
-//import {TweenMax} from "gsap";
-//import PropTypes from 'prop-types';
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import axios from 'axios';
+import moment from 'moment'
+import { DatePicker } from 'antd';
+import 'antd/dist/antd.css';
+const useStyles = makeStyles(theme => ({
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        width: 500,
+    },
+}));
 
-class AddRecord extends React.Component {
-    static defaultProps = {
-        ...Component.defaultProps
-    }
-    static propTypes = {}
-    constructor(props){
-        super(props)
-        this.state = {}
-        this.dom=React.createRef()
-        //React.createRef();current
-        //事件绑定在es6中用于自定义事件props事件不适用
-        //this.handleClick = this.handleClick.bind(this);
-    }
-    //组件将要装载
-    //componentWillMount(){}
-    //组件加载完毕
-    componentDidMount(){
-        //this.dom.root=ReactDOM.findDOMNode(this);
-    }
-    //组件将接收道具
-    //componentWillReceiveProps(nextProps){}
-    //shouldComponentUpdate(nextProps, nextState) {}
-    //组件将更新
-    //componentWillUpdate(nextProps, nextState){}
-    //组件更新完毕
-    //componentDidUpdate(nextProps, nextState){}
-    //组件将要卸载
-    //componentWillUnmount(){}
 
-    /*动画*/
-    //componentWillAppear(callback){}
-    //componentDidAppear(){}
-    //componentWillEnter(callback){}
-    //componentDidEnter(){}
-    //componentWillLeave(callback){}
-    //componentDidLeave(){}
-    render() {
-        return (
-            <div ref={this.dom}></div>
-        );
+export default function AndRecord() {
+    const classes = useStyles();
+
+    const [values, setValues] = React.useState({
+        isPass: false,
+        inputRecordTime:null,
+    });
+
+    function inputRecordTime (e){
+        let inputRecordTime = e;
+        setValues(oldValues => ({
+            ...oldValues,
+            inputRecordTime:inputRecordTime,
+        }));
+
     }
+    function onChange(value, dateString) {
+        console.log('Selected Time: ', value);
+        console.log('Formatted Selected Time: ', dateString);
+    }
+    function submitRecord(){
+        axios.post('/addRecord',{
+            isPass:values.isPass,
+            inputRecordTime:values.inputRecordTime,
+        }).then((res)=>{
+            // console.log('res',res);
+        })
+    }
+    return (
+        <div>
+            <div style={{width:"200px",margin:"20px"}}>
+                <DatePicker showTime size="large"  placeholder="选择结束时间" onChange={onChange} onOk={inputRecordTime} />
+            </div>
+
+            <Button variant="contained"
+                    color="primary"
+                    style={{height:'40px',marginTop:'15px',width:'20%'}}
+                    className={classes.margin}
+                    onClick={submitRecord}
+            >
+                提交补卡
+            </Button>
+
+        </div>
+    );
 }
-
-export default AddRecord;

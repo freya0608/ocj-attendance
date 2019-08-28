@@ -23,7 +23,6 @@ export default function AndFee() {
     const classes = useStyles();
 
     const [values, setValues] = React.useState({
-        isPass: false,
         inputFeeStart:null,
         inputFeeEnd:null
     });
@@ -41,7 +40,6 @@ export default function AndFee() {
     }
     function submitFee(){
         axios.post('/addFee',{
-            isPass:values.isPass,
             inputFeeStart:values.inputFeeStart,
             inputFeeEnd:values.inputFeeEnd,
         }).then((res)=>{

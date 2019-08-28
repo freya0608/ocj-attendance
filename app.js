@@ -243,6 +243,19 @@ router.post('/addFee', async(ctx, next) => {
 
 });
 
+router.post('/addRecord', async(ctx, next) => {
+    let {inputRecordTime} =  ctx.request.body;
+    const userId =  ctx.cookies.get('userId');
+    console.log('userId',userId)
+    let addFee = await Fee.create({
+        userId:userId,
+        recordTime:inputRecordTime,
+        isPass:0,
+        IsDelete:0
+    });
+    ctx.response.body ={status:200,msg:addFee}
+
+});
 router.post('/login', async(ctx, next) => {
     try{
         const {password,username} =  ctx.request.body;
