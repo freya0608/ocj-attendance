@@ -1,0 +1,36 @@
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0); }
+  to {
+    opacity: 1;
+    transform: none; } }
+
+.repair {
+  animation-name: fadeInUp;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  display: flex;
+  flex: 1; }
+  .repair *, .repair :after, .repair :before {
+    box-sizing: border-box; }
+  .repair .fl {
+    float: left; }
+  .repair .fr {
+    float: right; }
+  .repair .clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden; }
+  .repair .clearfix {
+    display: inline-block; }
+  .repair * html .clearfix {
+    height: 1%; }
+  .repair .clearfix {
+    display: block; }
+  .repair ul li:hover {
+    background: #f63;
+    cursor: pointer; }
+

@@ -1,0 +1,36 @@
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0); }
+  to {
+    opacity: 1;
+    transform: none; } }
+
+.leave-list {
+  animation-name: fadeInUp;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  display: flex;
+  flex: 1; }
+  .leave-list *, .leave-list :after, .leave-list :before {
+    box-sizing: border-box; }
+  .leave-list .fl {
+    float: left; }
+  .leave-list .fr {
+    float: right; }
+  .leave-list .clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden; }
+  .leave-list .clearfix {
+    display: inline-block; }
+  .leave-list * html .clearfix {
+    height: 1%; }
+  .leave-list .clearfix {
+    display: block; }
+  .leave-list ul li:hover {
+    background: #f63;
+    cursor: pointer; }
+

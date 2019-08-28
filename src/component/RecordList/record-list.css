@@ -1,0 +1,36 @@
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0); }
+  to {
+    opacity: 1;
+    transform: none; } }
+
+.record-list {
+  animation-name: fadeInUp;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  display: flex;
+  flex: 1; }
+  .record-list *, .record-list :after, .record-list :before {
+    box-sizing: border-box; }
+  .record-list .fl {
+    float: left; }
+  .record-list .fr {
+    float: right; }
+  .record-list .clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden; }
+  .record-list .clearfix {
+    display: inline-block; }
+  .record-list * html .clearfix {
+    height: 1%; }
+  .record-list .clearfix {
+    display: block; }
+  .record-list ul li:hover {
+    background: #f63;
+    cursor: pointer; }
+
