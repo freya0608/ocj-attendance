@@ -152,9 +152,7 @@ export default function RecordList() {
                     <TableHead>
                         <TableRow>
                             <StyledTableCell>用户id</StyledTableCell>
-                            <StyledTableCell align="center">开始时间</StyledTableCell>
-                            <StyledTableCell align="center">结束时间</StyledTableCell>
-                            <StyledTableCell align="center">计时</StyledTableCell>
+                            <StyledTableCell align="center">补卡时间</StyledTableCell>
                             <StyledTableCell align="center">创建时间</StyledTableCell>
                         </TableRow>
                     </TableHead>

@@ -117,6 +117,7 @@ export default function ScrollableTabsButtonPrevent() {
             <TabPanel value={value} index={4}>
                 补卡
                 <AddRecord/>
+                补卡记录
                 <RecordList/>
             </TabPanel>
             <TabPanel value={value} index={5}>

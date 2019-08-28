@@ -170,7 +170,29 @@ router.get('/getFeeList', async(ctx, next) => {
 
 
 });
+router.get('/getRecordList', async(ctx, next) => {
+    // console.log(ctx)
+    const userId =  ctx.cookies.get('userId')
 
+    const {
+        page,
+    } = await validate(ctx.query, {
+        page: Joi.number().integer().min(0).default(0),
+    });
+    let recordList = await Record.findAndCountAll({
+        where :{
+            userId:userId,
+            IsDelete:0
+        },
+        order: sequelize.literal('createdAt DESC'),
+        limit: 15,
+        offset: page*15,
+    });
+    // console.log(feeList)
+    ctx.response.body ={status:200,msg:recordList}
+
+
+});
 
 router.post('/addDuty', async(ctx, next) => {
     const {isPass,inputDutyStart,inputDutyEnd} =  ctx.request.body;
@@ -247,13 +269,13 @@ router.post('/addRecord', async(ctx, next) => {
     let {inputRecordTime} =  ctx.request.body;
     const userId =  ctx.cookies.get('userId');
     console.log('userId',userId)
-    let addFee = await Fee.create({
+    let addRecord = await Record.create({
         userId:userId,
         recordTime:inputRecordTime,
         isPass:0,
         IsDelete:0
     });
-    ctx.response.body ={status:200,msg:addFee}
+    ctx.response.body ={status:200,msg:addRecord}
 
 });
 router.post('/login', async(ctx, next) => {

@@ -9,7 +9,7 @@ const Record = sequelize.define('record',{
 	},
 	userId:Sequelize.INTEGER,
 	createdAt:Sequelize.DATE,
-	createdAt:Sequelize.DATE,
+	recordTime:Sequelize.DATE,
 	isDelete:{
 		type:Sequelize.BOOLEAN,
 		defaultValue:0

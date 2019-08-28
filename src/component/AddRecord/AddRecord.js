@@ -22,7 +22,6 @@ export default function AndRecord() {
     const classes = useStyles();
 
     const [values, setValues] = React.useState({
-        isPass: false,
         inputRecordTime:null,
     });
 
@@ -40,7 +39,6 @@ export default function AndRecord() {
     }
     function submitRecord(){
         axios.post('/addRecord',{
-            isPass:values.isPass,
             inputRecordTime:values.inputRecordTime,
         }).then((res)=>{
             // console.log('res',res);
