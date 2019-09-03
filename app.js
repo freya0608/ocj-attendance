@@ -19,7 +19,7 @@ const Duty = require('./models/duty');
 const Leave = require('./models/leave');
 const User = require('./models/user');
 const Record = require('./models/record');
-
+const Op = sequelize.Op;
 
 app.use(statics(
     path.join(__dirname,staticPath)
@@ -44,10 +44,11 @@ app.use(async(ctx, next) => {
         ctx.body =ctx.response.body;
     }else if(ctx.url==='/' && ctx.method === 'POST'){ //当请求时POST请求时
         ctx.body=await parsePostData(ctx);
-    }else{
-        //其它请求显示404页面
-        ctx.body='<h1>404!</h1>';
     }
+    // else{
+    //     //其它请求显示404页面
+    //     ctx.body='<h1>404!</h1>';
+    // }
 
 });
 
@@ -193,7 +194,79 @@ router.get('/getRecordList', async(ctx, next) => {
 
 
 });
+router.get('/getVerifyList', async(ctx, next) => {
+    // console.log(ctx)
+    const userId =  ctx.cookies.get('userId')
 
+    const {
+        page,
+    } = await validate(ctx.query, {
+        page: Joi.number().integer().min(0).default(0),
+    });
+    let managers = await  User.findAll({
+        where :{
+            managerId:userId,
+            IsDelete:0
+        },
+    });
+    let userIdList=[];
+
+     _.map(managers, v => v.toJSON())
+        .map((v) => {
+            userIdList = userIdList.concat(v.userId);
+        });
+    console.log('userIdList',userIdList)
+
+    let verifyList = await User.findAndCountAll({
+        order: sequelize.literal('createdAt DESC'),
+        limit: 15,
+        offset: page*15,
+        include:[
+            {
+                model: Duty,
+                as: 'Duty',
+                where:{
+                    isPass:0,
+                    isDelete:0,
+                    userId:{[Op.in]:userIdList}
+                },
+                required: false
+            },{
+                model: Fee,
+                as: 'Fee',
+                where:{
+                    isPass:0,
+                    isDelete:0,
+                    userId:{[Op.in]:userIdList}
+                },
+                required: false
+            },{
+                model: Leave,
+                as: 'Leave',
+                where:{
+                    isPass:0,
+                    isDelete:0,
+                    userId:{[Op.in]:userIdList}
+                },
+                required: false
+            },{
+                model: Record,
+                as: 'Record',
+                where:{
+                    isPass:0,
+                    isDelete:0,
+                    userId:{[Op.in]:userIdList}
+                },
+                required: false
+            },
+        ]
+    });
+
+    // console.log('verifyList66',verifyList)
+    ctx.response.body ={status:200,msg:verifyList}
+
+
+});
 router.post('/addDuty', async(ctx, next) => {
     const {isPass,inputDutyStart,inputDutyEnd} =  ctx.request.body;
     const userId =  ctx.cookies.get('userId')
@@ -210,11 +283,6 @@ router.post('/addDuty', async(ctx, next) => {
         end:inputDutyEnd,
         isPass:false,
         IsDelete:false,
-        include: [
-            {
-                model: User,
-                as: 'User'
-            }]
     });
     ctx.response.body ={status:200,msg:addDuty}
 

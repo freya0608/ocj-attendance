@@ -7,7 +7,13 @@ const Duty = sequelize.define('duty',{
 		type:Sequelize.INTEGER,
 		primaryKey: true
 	},
-	userId:Sequelize.INTEGER,
+	userId:{
+		type:Sequelize.INTEGER,
+		references: {
+			model: 'user',
+			key: 'userId'
+		}
+	},
 	end:{
 		type: Sequelize.DATE
 	},

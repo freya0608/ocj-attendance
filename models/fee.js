@@ -5,9 +5,16 @@ const Sequelize = require('sequelize');
 const Fee = sequelize.define('fee',{
 	id:{
 		type:Sequelize.INTEGER,
-		primaryKey: true
+		primaryKey: true,
+		autoIncrement: true
 	},
-	userId:Sequelize.INTEGER,
+	userId:{
+		type:Sequelize.INTEGER,
+		references: {
+			model: 'user',
+			key: 'userId'
+		}
+	},
 	end:{
 		type: Sequelize.DATE
 	},
@@ -31,7 +38,7 @@ const Fee = sequelize.define('fee',{
 	tableName:'fee',
 	defaultScope: {
 		where: {
-			IsDelete: false
+			IsDelete: 0
 		},
 	}
 });

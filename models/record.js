@@ -7,7 +7,13 @@ const Record = sequelize.define('record',{
 		type:Sequelize.INTEGER,
 		primaryKey: true
 	},
-	userId:Sequelize.INTEGER,
+	userId:{
+		type:Sequelize.INTEGER,
+		references: {
+			model: 'user',
+			key: 'userId'
+		}
+	},
 	createdAt:Sequelize.DATE,
 	recordTime:Sequelize.DATE,
 	isDelete:{

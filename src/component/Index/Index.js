@@ -25,6 +25,7 @@ import LeaveList from "../LeaveList/LeaveList";
 import AddLeave from "../AddLeave/AddLeave";
 import AddRecord from "../AddRecord/AddRecord";
 import RecordList from "../RecordList/RecordList";
+import VerifyList from "../VerifyList/VerifyList";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -122,6 +123,7 @@ export default function ScrollableTabsButtonPrevent() {
             </TabPanel>
             <TabPanel value={value} index={5}>
                审批
+                <VerifyList/>
             </TabPanel>
             <TabPanel value={value} index={6}>
                排班
