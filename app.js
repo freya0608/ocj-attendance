@@ -217,10 +217,10 @@ router.get('/getVerifyList', async(ctx, next) => {
         });
     console.log('userIdList',userIdList)
 
+    console.log('page',page);
     let verifyList = await User.findAndCountAll({
-        order: sequelize.literal('createdAt DESC'),
-        limit: 15,
-        offset: page*15,
+        limit: 1,
+        offset: page*1,
         include:[
             {
                 model: Duty,
@@ -230,6 +230,7 @@ router.get('/getVerifyList', async(ctx, next) => {
                     isDelete:0,
                     userId:{[Op.in]:userIdList}
                 },
+                order: sequelize.literal('createdAt DESC'),
                 required: false
             },{
                 model: Fee,
@@ -239,6 +240,7 @@ router.get('/getVerifyList', async(ctx, next) => {
                     isDelete:0,
                     userId:{[Op.in]:userIdList}
                 },
+                order: sequelize.literal('createdAt DESC'),
                 required: false
             },{
                 model: Leave,
@@ -248,6 +250,7 @@ router.get('/getVerifyList', async(ctx, next) => {
                     isDelete:0,
                     userId:{[Op.in]:userIdList}
                 },
+                order: sequelize.literal('createdAt DESC'),
                 required: false
             },{
                 model: Record,
@@ -257,6 +260,7 @@ router.get('/getVerifyList', async(ctx, next) => {
                     isDelete:0,
                     userId:{[Op.in]:userIdList}
                 },
+                order: sequelize.literal('createdAt DESC'),
                 required: false
             },
         ]
@@ -345,6 +349,50 @@ router.post('/addRecord', async(ctx, next) => {
     });
     ctx.response.body ={status:200,msg:addRecord}
 
+});
+
+router.post('/toPass',async (ctx,next)=>{
+    let {id,type} = ctx.request.body;
+    console.log('idddiididi',id,type);
+
+    if(type=='duty'){
+        const [duty] = await Duty.update({
+            isPass: 1
+        },{
+            where:{
+                id:id
+            }
+        });
+    }else  if(type=='fee'){
+        const [fee] = await Fee.update({
+            isPass: 1
+        },{
+            where:{
+                id:id
+            }
+        });
+    }else if(type=='leave'){
+        const [leave] = await Leave.update({
+            isPass: 1
+        },{
+            where:{
+                id:id
+            }
+        });
+    }else if(type=='record'){
+        const [record] = await Record.update({
+            isPass: 1
+        },{
+            where:{
+                id:id
+            }
+        });
+    }
+
+    ctx.response.body ={
+        status:200,
+        msg:'通过'
+    }
 });
 router.post('/login', async(ctx, next) => {
     try{

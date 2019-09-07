@@ -1,19 +1,13 @@
 import React,{Component,useEffect,useState} from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles, useTheme,withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableFooter from '@material-ui/core/TableFooter';
-import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
-import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
+
+import Button from '@material-ui/core/Button';
+import { message } from 'antd';
+
 import axios from 'axios';
 import moment from 'moment'
 
@@ -51,8 +45,10 @@ const useStyles2 = makeStyles(theme => ({
 
 export default function List(props) {
     const classes = useStyles2();
-    console.log('props',props)
+    // console.log('props',props)
     const {list} = props;
+
+    console.log('list',list)
 
     function attendanceType() {
         switch (props.type) {
@@ -63,66 +59,82 @@ export default function List(props) {
         }
     }
 
+    function submitPass (id,type){
+        console.log('idddiididi',id,type);
+        axios.post('/toPass',{
+            id:id,
+            type:type,
+        }).then((res)=>{
+            console.log('res',res);
+            message.success('审批成功！',1);
+        })
+    }
+
     return (
         props.type!=="record"?
-        <Paper className={classes.root}>
-            <div className={classes.tableWrapper}>
-                <Table className={classes.table}>
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell>用户名</StyledTableCell>
-                            <StyledTableCell align="center">考勤类型</StyledTableCell>
-                            <StyledTableCell align="center">开始时间</StyledTableCell>
-                            <StyledTableCell align="center">结束时间</StyledTableCell>
-                            <StyledTableCell align="center">计时</StyledTableCell>
-                            <StyledTableCell align="center">创建时间</StyledTableCell>
-                            <StyledTableCell align="center">审核</StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {list&&list.map(row => (
-                            <TableRow key={list.id}>
-                                <TableCell component="th" scope="row">{props.username}</TableCell>
-                                <TableCell component="th" scope="row">{attendanceType()||'无'}</TableCell>
-                                <TableCell align="center">{moment(new Date(row.start)).format("YYYY-MM-DD HH:mm:ss")||'无'}</TableCell>
-                                <TableCell align="center">{moment(new Date(row.end)).format("YYYY-MM-DD HH:mm:ss")||'无'}</TableCell>
-                                <TableCell align="center">{row.time||'无'}</TableCell>
-                                <TableCell align="center">{moment(new Date(row.createdAt)).format('YYYY-MM-DD HH:mm:ss')||'无'}</TableCell>
-                                <TableCell align="center">{row.isPass?'通过':'未审核'}</TableCell>
-                            </TableRow>
-                        ))}
+            <div>
+                <TableHead>
+                    <TableRow>
+                        <StyledTableCell>用户名</StyledTableCell>
+                        <StyledTableCell align="center">考勤类型</StyledTableCell>
+                        <StyledTableCell align="center">开始时间</StyledTableCell>
+                        <StyledTableCell align="center">结束时间</StyledTableCell>
+                        <StyledTableCell align="center">计时</StyledTableCell>
+                        <StyledTableCell align="center">创建时间</StyledTableCell>
+                        <StyledTableCell align="center">审核</StyledTableCell>
+                    </TableRow>
+                </TableHead>
 
-                    </TableBody>
-                </Table>
-            </div>
-        </Paper>
-            :
-        <Paper className={classes.root}>
-            <div className={classes.tableWrapper}>
-                <Table className={classes.table}>
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell>用户名</StyledTableCell>
-                            <StyledTableCell align="center">考勤类型</StyledTableCell>
-                            <StyledTableCell align="center">补卡时间</StyledTableCell>
-                            <StyledTableCell align="center">创建时间</StyledTableCell>
-                            <StyledTableCell align="center">审核</StyledTableCell>
+                <TableBody>
+                    {list&&list.map(row => (
+                        <TableRow key={row.id}>
+                            <TableCell component="th" scope="row">{props.username}</TableCell>
+                            <TableCell component="th" scope="row">{attendanceType()||'无'}</TableCell>
+                            <TableCell align="center">{moment(new Date(row.start)).format("YYYY-MM-DD HH:mm:ss")||'无'}</TableCell>
+                            <TableCell align="center">{moment(new Date(row.end)).format("YYYY-MM-DD HH:mm:ss")||'无'}</TableCell>
+                            <TableCell align="center">{row.time||'无'}</TableCell>
+                            <TableCell align="center">{moment(new Date(row.createdAt)).format('YYYY-MM-DD HH:mm:ss')||'无'}</TableCell>
+                            <TableCell align="center">
+                                <Button variant="outlined"
+                                        color="secondary"
+                                        onClick={()=>submitPass(row.id,props.type)}>
+                                    通过
+                                </Button>
+                            </TableCell>
                         </TableRow>
-                    </TableHead>
-                    <TableBody>
+                    ))}
+                </TableBody>
+            </div>
+            :
+            <div>
+                <TableHead>
+                    <TableRow>
+                        <StyledTableCell>用户名</StyledTableCell>
+                        <StyledTableCell align="center">考勤类型</StyledTableCell>
+                        <StyledTableCell align="center">补卡时间</StyledTableCell>
+                        <StyledTableCell align="center">创建时间</StyledTableCell>
+                        <StyledTableCell align="center">审核</StyledTableCell>
+                    </TableRow>
+                </TableHead>
+
+                <TableBody>
                         {list&&list.map(row => (
-                            <TableRow key={list.id}>
+                            <TableRow key={row.id}>
                                 <TableCell component="th" scope="row">{props.username||'无'}</TableCell>
                                 <TableCell align="center">{attendanceType()||'无'}</TableCell>
                                 <TableCell align="center">{moment(new Date(row.recordTime)).format('YYYY-MM-DD HH:mm:ss') ||'无'}</TableCell>
                                 <TableCell align="center">{moment(new Date(row.createdAt)).format('YYYY-MM-DD HH:mm:ss')||'无'}</TableCell>
-                                <TableCell align="center">{row.isPass?'通过':'未审核'}</TableCell>
+                                <TableCell align="center">
+                                    <Button variant="outlined"
+                                            color="secondary"
+                                            onClick={()=>submitPass(row.id,props.type)}>
+                                        通过
+                                    </Button>
+                                </TableCell>
                             </TableRow>
                         ))}
+                </TableBody>
 
-                    </TableBody>
-                </Table>
             </div>
-        </Paper>
     );
 }

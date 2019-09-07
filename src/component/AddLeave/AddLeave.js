@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import moment from 'moment'
+import { message } from 'antd';
+
 import { DatePicker } from 'antd';
 import 'antd/dist/antd.css';
 const useStyles = makeStyles(theme => ({
@@ -52,6 +54,7 @@ export default function AndLeave() {
             inputLeaveEnd:values.inputLeaveEnd,
         }).then((res)=>{
             // console.log('res',res);
+            message.success('提交成功！',1);
         })
     }
     return (

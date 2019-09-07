@@ -5,6 +5,8 @@ import axios from 'axios';
 import moment from 'moment'
 import { DatePicker } from 'antd';
 import 'antd/dist/antd.css';
+import { message } from 'antd';
+
 const useStyles = makeStyles(theme => ({
     container: {
         display: 'flex',
@@ -51,6 +53,8 @@ export default function AndDuty() {
             inputDutyEnd:values.inputDutyEnd,
         }).then((res)=>{
             // console.log('res',res);
+            message.success('提交成功！',1);
+
         })
     }
     return (

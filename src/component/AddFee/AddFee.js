@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
+import { message } from 'antd';
 
 import { DatePicker } from 'antd';
 import 'antd/dist/antd.css';
@@ -44,6 +45,8 @@ export default function AndFee() {
             inputFeeEnd:values.inputFeeEnd,
         }).then((res)=>{
             // console.log('res',res);
+            message.success('提交成功！',1);
+
         })
     }
     function onChange(value, dateString) {
