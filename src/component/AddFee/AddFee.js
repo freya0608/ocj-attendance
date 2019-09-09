@@ -6,7 +6,6 @@ import { message } from 'antd';
 
 import { DatePicker } from 'antd';
 import 'antd/dist/antd.css';
-import moment from "../AddDuty/AddDuty";
 const useStyles = makeStyles(theme => ({
     container: {
         display: 'flex',
@@ -45,8 +44,11 @@ export default function AndFee() {
             inputFeeEnd:values.inputFeeEnd,
         }).then((res)=>{
             // console.log('res',res);
-            message.success('提交成功！',1);
-
+            if(res.data.status==200){
+                message.success('提交成功！',1);
+            }else {
+                message.error('提交失败',1);
+            }
         })
     }
     function onChange(value, dateString) {

@@ -54,7 +54,11 @@ export default function AndLeave() {
             inputLeaveEnd:values.inputLeaveEnd,
         }).then((res)=>{
             // console.log('res',res);
-            message.success('提交成功！',1);
+            if(res.data.status==200){
+                message.success('提交成功！',1);
+            }else {
+                message.error('提交失败',1);
+            }
         })
     }
     return (

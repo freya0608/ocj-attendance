@@ -143,7 +143,7 @@ export default function VerifyList() {
         setRowsPerPage(parseInt(event.target.value, 1));
         setPage(0);
     }
-    
+
     return (
         <Paper className={classes.root}>
             <div className={classes.tableWrapper}>
