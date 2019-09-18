@@ -9,6 +9,7 @@ import Leave from './pages/leave';
 import Record from './pages/record';
 import Arrange from './pages/arrange';
 import Verify from './pages/verify';
+import Login from './pages/login';
 
 
 export default ()=>(
@@ -22,6 +23,7 @@ export default ()=>(
             <Route path='/record' component={Record}></Route>
             <Route path='/arrange' component={Arrange}></Route>
             <Route path='/verify' component={Verify}></Route>
+            <Route path='/login' component={Login}></Route>
         </Switch>
 
     </Router>

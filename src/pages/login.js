@@ -1,17 +1,17 @@
 import React, {Component} from 'react';
 import Tabbar from "../component/Tabbar";
-import VerifyList from "../component/VerifyList/VerifyList";
+import Login from "../component/Login";
 
 
-class VerifyList extends Component {
+class Login extends Component {
     render() {
         return (
             <div>
-                <VerifyList/>
+                <Login/>
 
             </div>
         );
     }
 }
 
-export default Tabbar(VerifyList);
+export default Tabbar(Login);
