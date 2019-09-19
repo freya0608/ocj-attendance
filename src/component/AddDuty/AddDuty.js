@@ -47,18 +47,23 @@ export default function AndDuty() {
         console.log('Formatted Selected Time: ', dateString);
     }
     function submitDuty(){
-        axios.post('/addDuty',{
-            isPass:values.isPass,
-            inputDutyStart:values.inputDutyStart,
-            inputDutyEnd:values.inputDutyEnd,
-        }).then((res)=>{
-            // console.log('res',res);
-            if(res.data.status==200){
-                message.success('提交成功！',1);
-            }else {
-                message.error('提交失败',1);
-            }
-        })
+        if(!values.inputDutyStart||!values.inputDutyEnd){
+            message.error('请填写时间',1);
+        }else {
+            axios.post('/addDuty',{
+                isPass:values.isPass,
+                inputDutyStart:values.inputDutyStart,
+                inputDutyEnd:values.inputDutyEnd,
+            }).then((res)=>{
+                // console.log('res',res);
+                if(res.data.status==200){
+                    message.success('提交成功！',1);
+                }else {
+                    message.error('提交失败',1);
+                }
+            })
+        }
+
     }
     return (
         <div>

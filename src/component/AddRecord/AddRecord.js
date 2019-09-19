@@ -40,16 +40,21 @@ export default function AndRecord() {
         console.log('Formatted Selected Time: ', dateString);
     }
     function submitRecord(e){
-        axios.post('/addRecord',{
-            inputRecordTime:values.inputRecordTime,
-        }).then((res)=>{
-            console.log('res',res);
-            if(res.data.status==200){
-                message.success('提交成功！',1);
-            }else {
-                message.error('提交失败',1);
-            }
-        })
+        if(!values.inputRecordTime){
+            message.error('请填写时间',1);
+        }else {
+            axios.post('/addRecord',{
+                inputRecordTime:values.inputRecordTime,
+            }).then((res)=>{
+                console.log('res',res);
+                if(res.data.status==200){
+                    message.success('提交成功！',1);
+                }else {
+                    message.error('提交失败',1);
+                }
+            })
+        }
+
     }
     return (
         <div>

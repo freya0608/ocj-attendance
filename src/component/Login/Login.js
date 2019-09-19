@@ -45,8 +45,8 @@ export default function InputWithIcon() {
                 // HashRouter.push({
                 //     pathname: '/index'
                 // })
-                console.log(window.location)
-                window.location.href="http://localhost:9999/#/index";
+                console.log(window.location);
+                window.location.href=window.location.origin+"/#/index";
                 console.log('登录成功');
             }else{
                 console.log('登录失败');

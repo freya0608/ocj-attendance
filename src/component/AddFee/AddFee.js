@@ -39,17 +39,22 @@ export default function AndFee() {
         }));
     }
     function submitFee(){
-        axios.post('/addFee',{
-            inputFeeStart:values.inputFeeStart,
-            inputFeeEnd:values.inputFeeEnd,
-        }).then((res)=>{
-            // console.log('res',res);
-            if(res.data.status==200){
-                message.success('提交成功！',1);
-            }else {
-                message.error('提交失败',1);
-            }
-        })
+        if(!values.inputFeeStart||!values.inputFeeEnd){
+            message.error('请填写时间',1);
+        }else {
+            axios.post('/addFee',{
+                inputFeeStart:values.inputFeeStart,
+                inputFeeEnd:values.inputFeeEnd,
+            }).then((res)=>{
+                // console.log('res',res);
+                if(res.data.status==200){
+                    message.success('提交成功！',1);
+                }else {
+                    message.error('提交失败',1);
+                }
+            })
+        }
+
     }
     function onChange(value, dateString) {
         console.log('Selected Time: ', value);

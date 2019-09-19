@@ -48,18 +48,24 @@ export default function AndLeave() {
     }
     function submitLeave(){
         console.log(values)
-        axios.post('/addLeave',{
-            isPass:values.isPass,
-            inputLeaveStart:values.inputLeaveStart,
-            inputLeaveEnd:values.inputLeaveEnd,
-        }).then((res)=>{
-            // console.log('res',res);
-            if(res.data.status==200){
-                message.success('提交成功！',1);
-            }else {
-                message.error('提交失败',1);
-            }
-        })
+        if(!values.inputLeaveStart||!values.inputLeaveEnd){
+            message.error('请填写时间',1);
+        }else {
+            console.log('leave')
+            axios.post('/addLeave',{
+                isPass:values.isPass,
+                inputLeaveStart:values.inputLeaveStart,
+                inputLeaveEnd:values.inputLeaveEnd,
+            }).then((res)=>{
+                // console.log('res',res);
+                if(res.data.status==200){
+                    message.success('提交成功！',1);
+                }else {
+                    message.error('提交失败',1);
+                }
+            })
+        }
+
     }
     return (
         <div>

@@ -3,7 +3,7 @@ import Tabbar from "../component/Tabbar";
 import VerifyList from "../component/VerifyList/VerifyList";
 
 
-class VerifyList extends Component {
+class VerifyList1 extends Component {
     render() {
         return (
             <div>
@@ -14,4 +14,4 @@ class VerifyList extends Component {
     }
 }
 
-export default Tabbar(VerifyList);
+export default Tabbar(VerifyList1);

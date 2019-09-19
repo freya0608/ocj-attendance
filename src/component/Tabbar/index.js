@@ -7,14 +7,6 @@ const tabbarArr = [
         text:'我的',
         link:'/index'
     },{
-        img:'icon-kaoqinjiaban',
-        text:'加班费',
-        link: '/fee'
-    },{
-        img:'icon-kaoqinguanli',
-        text:'值班',
-        link:'/duty'
-    },{
         img:'icon-kaoqinqingjia',
         text:'请假',
         link:'/leave'
@@ -22,6 +14,14 @@ const tabbarArr = [
         img:'icon-kaoqinbulu',
         text:'补卡',
         link:'/record'
+    },{
+        img:'icon-kaoqinjiaban',
+        text:'加班费',
+        link: '/fee'
+    },{
+        img:'icon-kaoqinguanli',
+        text:'值班',
+        link:'/duty'
     },{
         img:'icon-duihao',
         text:'审核',

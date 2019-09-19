@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import Tabbar from "../component/Tabbar";
-import Login from "../component/Login";
+import Login  from "../component/Login/Login";
 
 
-class Login extends Component {
+class ToLogin extends Component {
     render() {
         return (
             <div>
@@ -14,4 +14,4 @@ class Login extends Component {
     }
 }
 
-export default Tabbar(Login);
+export default Tabbar(ToLogin);
