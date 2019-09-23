@@ -48,6 +48,7 @@ export default function InputWithIcon() {
                 console.log(window.location);
                 window.location.href=window.location.origin+"/#/index";
                 console.log('登录成功');
+                window.location.reload()
             }else{
                 console.log('登录失败');
             }

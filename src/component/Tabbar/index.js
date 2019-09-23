@@ -11,21 +11,17 @@ const tabbarArr = [
         text:'请假',
         link:'/leave'
     },{
-        img:'icon-kaoqinbulu',
-        text:'补卡',
-        link:'/record'
+        img:'icon-kaoqinguanli',
+        text:'值班',
+        link:'/duty'
     },{
         img:'icon-kaoqinjiaban',
         text:'加班费',
         link: '/fee'
     },{
-        img:'icon-kaoqinguanli',
-        text:'值班',
-        link:'/duty'
-    },{
-        img:'icon-duihao',
-        text:'审核',
-        link:'/verify'
+        img:'icon-kaoqinbulu',
+        text:'补卡',
+        link:'/record'
     },{
         img:'icon-kaoqinbiao',
         text:'排班',
@@ -33,6 +29,20 @@ const tabbarArr = [
     }
 ];
 
+
+var verify = {
+        img:'icon-duihao',
+        text:'审核',
+        link:'/verify'
+    };
+
+
+// console.log(document.cookie.split(";")[0].split("=")[1]);
+if(document.cookie.substring(document.cookie.indexOf('userId=')+7,document.cookie.indexOf('userId=')+13)==105668){
+    tabbarArr.push(verify)
+}
+
+// console.log(tabbarArr);
 
 
 const Tabbar = (WrappedComponent)=> class Tabbar extends Component {
@@ -57,12 +67,12 @@ const Tabbar = (WrappedComponent)=> class Tabbar extends Component {
                             {
                                 tabbarArr.map((item,index)=>(
                                     <Link to={item.link} key={index}
-                                          className={"tabbar-item " + (url.indexOf(item.link) >-1?'active':'')}
-                                        // onClick={()=>this.itemChange(index)}
-                                    >
-                                        <div className={'iconfont '+ item.img}></div>
-                                        <div>{item.text}</div>
-                                    </Link>
+                                className={"tabbar-item " + (url.indexOf(item.link) >-1?'active':'')}
+                                // onClick={()=>this.itemChange(index)}
+                                >
+                                <div className={'iconfont '+ item.img}></div>
+                                <div>{item.text}</div>
+                                </Link>
                                 ))
                             }
                         </div>

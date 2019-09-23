@@ -412,7 +412,7 @@ router.post('/login', async(ctx, next) => {
         if(user){
 
             // 登录成功，设置cookie
-            ctx.cookies.set('userId', user.userId, {httpOnly:false});
+            ctx.cookies.set('userId', user.userId, {httpOnly:false,maxAge:60*1000*30});
             ctx.body = {
                 status: 200,
                 userId: user.userId,

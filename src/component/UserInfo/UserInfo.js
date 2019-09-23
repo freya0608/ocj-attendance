@@ -22,6 +22,9 @@ const useStyles = makeStyles({
     pos: {
         marginBottom: 12,
     },
+    color:{
+        color: "#dc004e"
+    }
 });
 
 export default function UserInfo() {
@@ -47,13 +50,18 @@ export default function UserInfo() {
             </CardActions>
 
             <CardActions>
-                <Button size="large">值班时间{  userInfo&&userInfo.timeDutyCount}小时</Button>
+                <Button size="large">值班时间{   parseFloat(userInfo&&userInfo.timeDutyCount).toFixed(2)}小时</Button>
             </CardActions>
             <CardActions>
-                <Button size="large">请假时间{  userInfo&&userInfo.timeLeaveCount}小时</Button>
+                <Button size="large">请假时间{  parseFloat(userInfo&&userInfo.timeLeaveCount).toFixed(2)}小时</Button>
             </CardActions>
             <CardActions>
-                <Button size="large">加班费时间{ userInfo&& userInfo.timeFeeCount}小时</Button>
+                <Button size="large" >还剩余的时间
+                    <span className={classes.color}>{(parseFloat(userInfo&&userInfo.timeDutyCount) - parseFloat(userInfo&&userInfo.timeLeaveCount) ).toFixed(2)}</span>小时
+                </Button>
+            </CardActions>
+            <CardActions>
+                <Button size="large">加班费时间{ parseFloat(userInfo&& userInfo.timeFeeCount).toFixed(2)}小时</Button>
             </CardActions>
         </Card>
     );

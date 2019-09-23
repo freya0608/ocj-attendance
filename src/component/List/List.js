@@ -66,7 +66,10 @@ export default function List(props) {
             type:type,
         }).then((res)=>{
             console.log('res',res);
-            message.success('审批成功！',1);
+            message.success('审批成功！',0);
+            setTimeout(()=>{
+                window.location.reload()
+            },500)
         })
     }
 

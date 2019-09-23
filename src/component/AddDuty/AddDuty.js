@@ -58,6 +58,7 @@ export default function AndDuty() {
                 // console.log('res',res);
                 if(res.data.status==200){
                     message.success('提交成功！',1);
+                    window.location.reload()
                 }else {
                     message.error('提交失败',1);
                 }
