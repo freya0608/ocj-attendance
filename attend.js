@@ -1,5 +1,5 @@
 const Koa = require('koa');
-const app = new Koa();
+const attend = new Koa();
 const bodyParser = require('koa-bodyparser');
 const Router = require('koa-router');
 const router = new Router();
@@ -21,21 +21,21 @@ const User = require('./models/user');
 const Record = require('./models/record');
 const Op = sequelize.Op;
 
-app.use(statics(
+attend.use(statics(
     path.join(__dirname,staticPath)
 ));
-app.use(statics('.'));
+attend.use(statics('.'));
 
 //http://m.ocj.com.cn/image_site/event/
-app.use(bodyParser());
+attend.use(bodyParser());
 
-app.use(async (ctx,next) =>{
+attend.use(async (ctx, next) =>{
     console.log(`${ctx.request.method} ${ctx.request.url}`); // 打印URL
     await next(); // 调用下一个middleware
 });
 
 
-app.use(async(ctx, next) => {
+attend.use(async(ctx, next) => {
     await next();
     ctx.response.type = 'text/html';
     // ctx.response.body = '<h1>Hello,koa2222!</h1>';
@@ -54,47 +54,53 @@ app.use(async(ctx, next) => {
 
 router.get('/userInfo', async(ctx, next) => {
     // console.log(ctx)
-    const userId =  ctx.cookies.get('userId');
-    console.log('9999')
+    try{
+        const userId =  ctx.cookies.get('userId');
+        console.log('9999')
 
-    let timeFeeCount = await Fee.sum('time',{
-        where :{
-            userId:userId,
-            IsDelete:0,
-            isPass:1
-        },
+        let timeFeeCount = await Fee.sum('time',{
+            where :{
+                userId:userId,
+                IsDelete:0,
+                isPass:1
+            },
 
-    });
-    let timeDutyCount = await Duty.sum('time',{
-        where :{
-            userId:userId,
-            IsDelete:0,
-            isPass:1
-        },
-    });
-    let timeLeaveCount = await Leave.sum('time',{
-        where :{
-            userId:userId,
-            IsDelete:0,
-            isPass:1
-        },
-    });
-    let userInfo = await User.findOne({
-        where :{
-            userId:userId,
-            IsDelete:0
-        },
-    });
-    // console.log(feeList)
-    ctx.response.body ={
-        status:200,
-        msg:{
-            timeFeeCount,
-            timeDutyCount,
-            timeLeaveCount,
-            userInfo
+        });
+        let timeDutyCount = await Duty.sum('time',{
+            where :{
+                userId:userId,
+                IsDelete:0,
+                isPass:1
+            },
+        });
+        let timeLeaveCount = await Leave.sum('time',{
+            where :{
+                userId:userId,
+                IsDelete:0,
+                isPass:1
+            },
+        });
+        let userInfo = await User.findOne({
+            where :{
+                userId:userId,
+                IsDelete:0
+            },
+        });
+        ctx.response.body ={
+            status:200,
+            msg:{
+                timeFeeCount,
+                timeDutyCount,
+                timeLeaveCount,
+                userInfo
+            }
         }
+    }catch (e) {
+        throw (e)
     }
+
+    // console.log(feeList)
+
 
 });
 
@@ -481,7 +487,7 @@ function allowCross(ctx) {
 
 
 
-app.use(cors());
-app.use(router.routes());
+attend.use(cors());
+attend.use(router.routes());
 
-app.listen(9999);
+attend.listen(9999);
