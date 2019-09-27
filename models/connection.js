@@ -4,7 +4,8 @@ exports.getConnection = function(){
 		host: 'localhost',
 		database: 'safety',
 		user: 'root',
-		password: 'freya123'
+		// password: 'freya123',
+		password: 'Uxd123',
 	});
 	connection.connect();
 	return connection;
