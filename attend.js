@@ -352,7 +352,6 @@ router.post('/addLeave', async(ctx, next) => {
             subject: `${user.username}的请假转发`, // 主题
             text: `${user.username}-${user.userId}的请假`, // plain text body
             html: `${user.username}-${user.userId}的请假 
-            
             <table>
               <tr>
                  <th style="width: 150px;text-align: center">姓名</th>
@@ -368,8 +367,7 @@ router.post('/addLeave', async(ctx, next) => {
                 <td style="width: 200px;text-align: center">${moment(new Date(inputLeaveEnd)).format("YYYY-MM-DD HH:mm:ss")}</td>
                 <td style="width: 200px;text-align: center">${consumingHours}小时</td>
               </tr>
-            </table>
-            `, // html body
+            </table>`, // html body
         };
 
 
