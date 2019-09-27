@@ -348,7 +348,7 @@ router.post('/addLeave', async(ctx, next) => {
         // 设置邮件内容（谁发送什么给谁）
         let mailOptions = {
             from: `${user.username} <985976996@qq.com>`,  // 发件人
-            to: 'lifenying@ocj.com.cn', // 收件人,hujun5668@ocj.com.cn
+            to: 'lifenying@ocj.com.cn,hujun5668@ocj.com.cn', // 收件人,rayimdb@ocj.com.cn,hujun5668@ocj.com.cn
             subject: `${user.username}的请假转发`, // 主题
             text: `${user.username}-${user.userId}的请假`, // plain text body
             html: `${user.username}-${user.userId}的请假 
@@ -368,7 +368,6 @@ router.post('/addLeave', async(ctx, next) => {
                 <td style="width: 200px;text-align: center">${moment(new Date(inputLeaveEnd)).format("YYYY-MM-DD HH:mm:ss")}</td>
                 <td style="width: 200px;text-align: center">${consumingHours}小时</td>
               </tr>
-           
             </table>
             `, // html body
         };
