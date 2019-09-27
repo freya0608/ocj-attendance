@@ -38,7 +38,7 @@ export default function InputWithIcon() {
     function submitLogin(){
         axios.post('/login',{
             password:values.password,
-            username:values.username,
+            userId:values.username,
         }).then((res)=>{
             console.log('res',res);
             if(res.data.status==200){

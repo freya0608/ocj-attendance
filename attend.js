@@ -10,6 +10,7 @@ const validate = require('./lib/validate');
 const Joi = require('joi');
 const statics = require('koa-static');
 const moment =  require('moment')
+const nodemailer = require('nodemailer');
 
 const staticPath = './build';
 const sequelize = require('sequelize');
@@ -298,28 +299,105 @@ router.post('/addDuty', async(ctx, next) => {
 
 });
 router.post('/addLeave', async(ctx, next) => {
-    const {isPass,inputLeaveStart,inputLeaveEnd} =  ctx.request.body;
-    const userId =  ctx.cookies.get('userId')
 
-    let consumingHours = moment.duration(moment(inputLeaveEnd).valueOf()- moment(inputLeaveStart).valueOf()).as('hours');
-    consumingHours = parseFloat(consumingHours.toFixed(2))
-    console.log(isPass,inputLeaveStart,inputLeaveEnd,consumingHours);
+    try {
+        const {isPass,inputLeaveStart,inputLeaveEnd} =  ctx.request.body;
+        const userId =  ctx.cookies.get('userId')
+
+        let consumingHours = moment.duration(moment(inputLeaveEnd).valueOf()- moment(inputLeaveStart).valueOf()).as('hours');
+        consumingHours = parseFloat(consumingHours.toFixed(2))
+        console.log(isPass,inputLeaveStart,inputLeaveEnd,consumingHours);
 
 
-    let addLeave = await Leave.create({
-        userId:userId,
-        time:consumingHours,
-        start:inputLeaveStart,
-        end:inputLeaveEnd,
-        isPass:false,
-        IsDelete:false,
-        include: [
-            {
-                model: User,
-                as: 'User'
-            }]
-    });
-    ctx.response.body ={status:200,msg:addLeave}
+        let addLeave = await Leave.create({
+            userId:userId,
+            time:consumingHours,
+            start:inputLeaveStart,
+            end:inputLeaveEnd,
+            isPass:false,
+            IsDelete:false,
+            include: [
+                {
+                    model: User,
+                    as: 'User'
+                }]
+        });
+
+        let user = await User.findOne({
+            where :{
+                userId:userId,
+                IsDelete:0
+            },
+        });
+
+        console.log(user);
+
+
+
+        // 开启一个 SMTP 连接池
+        let transporter = nodemailer.createTransport({
+            host: 'smtp.qq.com',
+            secureConnection: true, // use SSL
+            port: 465,
+            secure: true, // secure:true for port 465, secure:false for port 587
+            auth: {
+                user: '985976996@qq.com',
+                pass: 'haohzcldeqcpbbif' // QQ邮箱需要使用授权码
+            }
+        });
+
+        // 设置邮件内容（谁发送什么给谁）
+        let mailOptions = {
+            from: `${user.username} <985976996@qq.com>`,  // 发件人
+            to: 'lifenying@ocj.com.cn，hujun5668@ocj.com.cn  ', // 收件人
+            subject: `${user.username}的请假转发`, // 主题
+            text: `${user.username}-${user.userId}的请假`, // plain text body
+            html: `${user.username}-${user.userId}的请假 
+            
+            <table>
+              <tr>
+                 <th style="width: 150px;text-align: center">姓名</th>
+                 <th style="width: 150px;text-align: center">工号</th>
+                 <th style="width: 200px;text-align: center">开始时间</th>
+                 <th style="width: 200px;text-align: center">结束时间</th>
+                 <th style="width: 200px;text-align: center">时长</th>
+              </tr>
+              <tr>
+                <td style="width: 150px;text-align: center">${user.username}</td>
+                <td style="width: 150px;text-align: center">${user.userId}</td>
+                <td style="width: 200px;text-align: center">${moment(new Date(inputLeaveStart)).format("YYYY-MM-DD HH:mm:ss")}</td>
+                <td style="width: 200px;text-align: center">${moment(new Date(inputLeaveEnd)).format("YYYY-MM-DD HH:mm:ss")}</td>
+                <td style="width: 200px;text-align: center">${consumingHours}小时</td>
+              </tr>
+           
+            </table>
+            `, // html body
+        };
+
+
+        // 使用先前创建的传输器的 sendMail 方法传递消息对象
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return console.log(error);
+            }
+            console.log(`Message: ${info.messageId}`);
+            console.log(`sent: ${info.response}`);
+        });
+
+
+
+
+        ctx.response.body ={status:200,msg:addLeave}
+
+    }catch (e) {
+        console.log('[/addleave] error:', e.message, e.stack);
+        ctx.body = {
+            status: e.code || -1,
+            body: e.message
+        };
+    }
+
+
 
 });
 
@@ -402,14 +480,14 @@ router.post('/toPass',async (ctx,next)=>{
 });
 router.post('/login', async(ctx, next) => {
     try{
-        const {password,username} =  ctx.request.body;
+        const {password,userId} =  ctx.request.body;
 
-        console.log(password,username);
+        console.log(password,userId);
 
         let user = await User.findOne({
             where :{
                 password:password,
-                userId:username,
+                userId:userId,
                 IsDelete:0
             },
         });
@@ -418,7 +496,12 @@ router.post('/login', async(ctx, next) => {
         if(user){
 
             // 登录成功，设置cookie
-            ctx.cookies.set('userId', user.userId, {httpOnly:false,maxAge:60*1000*30});
+            ctx.cookies.set('userId', user.userId,
+                {
+                    httpOnly:false,
+                    // maxAge:60*1000*30
+
+                });
             ctx.body = {
                 status: 200,
                 userId: user.userId,
