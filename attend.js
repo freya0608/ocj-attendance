@@ -65,7 +65,6 @@ router.get('/userInfo', async(ctx, next) => {
                 IsDelete:0,
                 isPass:1
             },
-
         });
         let timeDutyCount = await Duty.sum('time',{
             where :{
@@ -349,7 +348,7 @@ router.post('/addLeave', async(ctx, next) => {
         // 设置邮件内容（谁发送什么给谁）
         let mailOptions = {
             from: `${user.username} <985976996@qq.com>`,  // 发件人
-            to: 'lifenying@ocj.com.cn，hujun5668@ocj.com.cn  ', // 收件人
+            to: 'lifenying@ocj.com.cn', // 收件人,hujun5668@ocj.com.cn
             subject: `${user.username}的请假转发`, // 主题
             text: `${user.username}-${user.userId}的请假`, // plain text body
             html: `${user.username}-${user.userId}的请假 

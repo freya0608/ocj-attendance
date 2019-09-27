@@ -156,6 +156,7 @@ export default function LeaveList() {
                             <StyledTableCell align="center">结束时间</StyledTableCell>
                             <StyledTableCell align="center">计时</StyledTableCell>
                             <StyledTableCell align="center">创建时间</StyledTableCell>
+                            <StyledTableCell align="center">通过</StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -167,6 +168,7 @@ export default function LeaveList() {
                                 <TableCell align="center">{moment(new Date(row.end)).format("YYYY-MM-DD HH:mm:ss")}</TableCell>
                                 <TableCell align="center">{row.time}</TableCell>
                                 <TableCell align="center">{moment(new Date(row.createdAt)).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
+                                <TableCell align="center">{row.isPass?'通过':'待审批'}</TableCell>
                             </TableRow>
                         ))}
 
