@@ -320,6 +320,7 @@ router.post('/addDuty', async(ctx, next) => {
         let mailOptions = {
             from: `${user.username} <985976996@qq.com>`,  // 发件人
             to: `${user.email},hujun5668@ocj.com.cn`, // 收件人,rayimdb@ocj.com.cn,hujun5668@ocj.com.cn
+            // to: `${user.email}`, // 收件人,rayimdb@ocj.com.cn,hujun5668@ocj.com.cn
             subject: `${user.username}的值班转发`, // 主题
             text: `${user.username}-${user.userId}的值班`, // plain text body
             html: `${user.username}-${user.userId}的值班 
@@ -416,6 +417,7 @@ router.post('/addLeave', async(ctx, next) => {
         let mailOptions = {
             from: `${user.username} <985976996@qq.com>`,  // 发件人
             to: `${user.email},rayimdb@ocj.com.cn,hujun5668@ocj.com.cn`, // 收件人,rayimdb@ocj.com.cn,hujun5668@ocj.com.cn
+            // to: `${user.email}`, // 收件人,rayimdb@ocj.com.cn,hujun5668@ocj.com.cn
             subject: `${user.username}的请假转发`, // 主题
             text: `${user.username}-${user.userId}的请假`, // plain text body
             html: `${user.username}-${user.userId}的请假 
@@ -499,7 +501,7 @@ router.post('/addRecord', async(ctx, next) => {
 });
 
 router.post('/toPass',async (ctx,next)=>{
-    let {id,type} = ctx.request.body;
+    let {id,type,userId} = ctx.request.body;
     console.log('idddiididi',id,type);
 
     if(type=='duty'){
@@ -535,6 +537,49 @@ router.post('/toPass',async (ctx,next)=>{
             }
         });
     }
+
+
+    let user = await User.findOne({
+        where :{
+            userId:userId,
+            IsDelete:0
+        },
+    });
+
+    // console.log(user);
+
+    // 开启一个 SMTP 连接池
+    let transporter = nodemailer.createTransport({
+        host: 'smtp.qq.com',
+        secureConnection: true, // use SSL
+        port: 465,
+        secure: true, // secure:true for port 465, secure:false for port 587
+        auth: {
+            user: '985976996@qq.com',
+            pass: 'haohzcldeqcpbbif' // QQ邮箱需要使用授权码
+        }
+    });
+
+    console.log('email',user.email)
+    // 设置邮件内容（谁发送什么给谁）
+    let mailOptions = {
+        from: `${user.username} <985976996@qq.com>`,  // 发件人
+        // to: `${user.email},rayimdb@ocj.com.cn,hujun5668@ocj.com.cn`, // 收件人,rayimdb@ocj.com.cn,hujun5668@ocj.com.cn
+        to: `${user.email}`, // 收件人,rayimdb@ocj.com.cn,hujun5668@ocj.com.cn
+        subject: `${user.username}的请假/值班转发`, // 主题
+        text: `${user.username}-${user.userId}的请假`, // plain text body
+        html: `${user.username}-${user.userId}的请假或者值班已经通过`, // html body
+    };
+
+
+    // 使用先前创建的传输器的 sendMail 方法传递消息对象
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log(`Message: ${info.messageId}`);
+        console.log(`sent: ${info.response}`);
+    });
 
     ctx.response.body ={
         status:200,

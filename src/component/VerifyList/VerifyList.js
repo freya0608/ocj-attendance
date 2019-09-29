@@ -153,10 +153,10 @@ export default function VerifyList() {
                         verify&&verify.verifyList.map((item,index)=>(
                             <div key={index}>
                                 <div>{item.username}</div>
-                                <List type='duty' username={item.username} list={item&&item.Duty}/>
-                                <List type='leave'  username={item.username} list={item&&item.Leave}/>
-                                <List type='fee'  username={item.username} list={item&&item.Fee}/>
-                                <List type='record' username={item.username}  list={item&&item.Record}/>
+                                <List type='duty' username={item.username} userId = {item.userId} list={item&&item.Duty}/>
+                                <List type='leave'  username={item.username} userId = {item.userId} list={item&&item.Leave}/>
+                                <List type='fee'  username={item.username} userId = {item.userId} list={item&&item.Fee}/>
+                                <List type='record' username={item.username} userId = {item.userId}  list={item&&item.Record}/>
                             </div>
                         ))
                     }

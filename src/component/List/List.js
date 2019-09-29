@@ -59,11 +59,12 @@ export default function List(props) {
         }
     }
 
-    function submitPass (id,type){
+    function submitPass (id,type,userId){
         console.log('idddiididi',id,type);
         axios.post('/toPass',{
             id:id,
             type:type,
+            userId:userId,
         }).then((res)=>{
             console.log('res',res);
             message.success('审批成功！',0);
@@ -100,7 +101,7 @@ export default function List(props) {
                             <TableCell align="center">
                                 <Button variant="outlined"
                                         color="secondary"
-                                        onClick={()=>submitPass(row.id,props.type)}>
+                                        onClick={()=>submitPass(row.id,props.type,props.userId)}>
                                     通过
                                 </Button>
                             </TableCell>
@@ -130,7 +131,7 @@ export default function List(props) {
                                 <TableCell align="center">
                                     <Button variant="outlined"
                                             color="secondary"
-                                            onClick={()=>submitPass(row.id,props.type)}>
+                                            onClick={()=>submitPass(row.id,props.type,props.userId)}>
                                         通过
                                     </Button>
                                 </TableCell>
