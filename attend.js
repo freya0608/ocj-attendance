@@ -278,23 +278,89 @@ router.get('/getVerifyList', async(ctx, next) => {
 
 });
 router.post('/addDuty', async(ctx, next) => {
-    const {isPass,inputDutyStart,inputDutyEnd} =  ctx.request.body;
-    const userId =  ctx.cookies.get('userId')
 
-    let consumingHours = moment.duration(moment(inputDutyEnd).valueOf()- moment(inputDutyStart).valueOf()).as('hours');
-    consumingHours = parseFloat(consumingHours.toFixed(2))
-    console.log(isPass,inputDutyStart,inputDutyEnd);
+    try {
+        const {isPass,inputDutyStart,inputDutyEnd} =  ctx.request.body;
+        const userId =  ctx.cookies.get('userId')
+
+        let consumingHours = moment.duration(moment(inputDutyEnd).valueOf()- moment(inputDutyStart).valueOf()).as('hours');
+        consumingHours = parseFloat(consumingHours.toFixed(2))
+        console.log(isPass,inputDutyStart,inputDutyEnd);
 
 
-    let addDuty = await Duty.create({
-        userId:userId,
-        time:consumingHours,
-        start:inputDutyStart,
-        end:inputDutyEnd,
-        isPass:false,
-        IsDelete:false,
-    });
-    ctx.response.body ={status:200,msg:addDuty}
+        let addDuty = await Duty.create({
+            userId:userId,
+            time:consumingHours,
+            start:inputDutyStart,
+            end:inputDutyEnd,
+            isPass:false,
+            IsDelete:false,
+        });
+
+        let user = await User.findOne({
+            where :{
+                userId:userId,
+                IsDelete:0
+            },
+        });
+
+        let transporter = nodemailer.createTransport({
+            host: 'smtp.qq.com',
+            secureConnection: true, // use SSL
+            port: 465,
+            secure: true, // secure:true for port 465, secure:false for port 587
+            auth: {
+                user: '985976996@qq.com',
+                pass: 'haohzcldeqcpbbif' // QQ邮箱需要使用授权码
+            }
+        });
+
+        console.log('email',user.email)
+        // 设置邮件内容（谁发送什么给谁）
+        let mailOptions = {
+            from: `${user.username} <985976996@qq.com>`,  // 发件人
+            to: `${user.email},hujun5668@ocj.com.cn`, // 收件人,rayimdb@ocj.com.cn,hujun5668@ocj.com.cn
+            subject: `${user.username}的值班转发`, // 主题
+            text: `${user.username}-${user.userId}的值班`, // plain text body
+            html: `${user.username}-${user.userId}的值班 
+            <table>
+              <tr>
+                 <th style="width: 150px;text-align: center">姓名</th>
+                 <th style="width: 150px;text-align: center">工号</th>
+                 <th style="width: 200px;text-align: center">开始时间</th>
+                 <th style="width: 200px;text-align: center">结束时间</th>
+                 <th style="width: 200px;text-align: center">时长</th>
+              </tr>
+              <tr>
+                <td style="width: 150px;text-align: center">${user.username}</td>
+                <td style="width: 150px;text-align: center">${user.userId}</td>
+                <td style="width: 200px;text-align: center">${moment(new Date(inputDutyStart)).format("YYYY-MM-DD HH:mm:ss")}</td>
+                <td style="width: 200px;text-align: center">${moment(new Date(inputDutyEnd)).format("YYYY-MM-DD HH:mm:ss")}</td>
+                <td style="width: 200px;text-align: center">${consumingHours}小时</td>
+              </tr>
+            </table>`, // html body
+        };
+
+
+        // 使用先前创建的传输器的 sendMail 方法传递消息对象
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return console.log(error);
+            }
+            console.log(`Message: ${info.messageId}`);
+            console.log(`sent: ${info.response}`);
+        });
+        ctx.response.body ={status:200,msg:addDuty}
+
+    }catch(e) {
+        console.log('[/addleave] error:', e.message, e.stack);
+        ctx.body = {
+            status: e.code || -1,
+            body: e.message
+        };
+    }
+
+
 
 });
 router.post('/addLeave', async(ctx, next) => {
@@ -329,7 +395,7 @@ router.post('/addLeave', async(ctx, next) => {
             },
         });
 
-        console.log(user);
+        // console.log(user);
 
 
 
@@ -345,10 +411,11 @@ router.post('/addLeave', async(ctx, next) => {
             }
         });
 
+        console.log('email',user.email)
         // 设置邮件内容（谁发送什么给谁）
         let mailOptions = {
             from: `${user.username} <985976996@qq.com>`,  // 发件人
-            to: 'lifenying@ocj.com.cn,hujun5668@ocj.com.cn', // 收件人,rayimdb@ocj.com.cn,hujun5668@ocj.com.cn
+            to: `${user.email},rayimdb@ocj.com.cn,hujun5668@ocj.com.cn`, // 收件人,rayimdb@ocj.com.cn,hujun5668@ocj.com.cn
             subject: `${user.username}的请假转发`, // 主题
             text: `${user.username}-${user.userId}的请假`, // plain text body
             html: `${user.username}-${user.userId}的请假 
@@ -569,4 +636,4 @@ function allowCross(ctx) {
 attend.use(cors());
 attend.use(router.routes());
 
-attend.listen(9999);
+attend.listen(9090);

@@ -23,7 +23,9 @@ const User = sequelize.define('User',{
 	isDelete:{
 		type:Sequelize.BOOLEAN,
 		defaultValue:0
-	}
+	},
+	email:Sequelize.STRING,
+
 },{
 	tableName:'User',
 	defaultScope: {
