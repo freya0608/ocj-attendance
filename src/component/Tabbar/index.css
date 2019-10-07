@@ -6,6 +6,7 @@
     /*padding: 5px 0;*/
     border:1px solid rgba(204,204,204,0.43);
     text-align: center;
+    background-color: #3f51b5;
 }
 .tabbar-chilren{
     top: 70px;
@@ -16,14 +17,13 @@
     display:flex;
 }
 .tabbar-item{
-
     flex:1;        /*每个元素均分的*/
 }
 .active{
     color: rgb(220, 0, 78) !important;
 }
 a{
-    color:#3f51b5 ;
+    color:#fff ;
 }
 a:hover{
     color:rgb(220, 0, 78) ;
