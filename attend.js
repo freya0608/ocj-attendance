@@ -354,7 +354,7 @@ router.post('/addDuty', async(ctx, next) => {
         ctx.response.body ={status:200,msg:addDuty}
 
     }catch(e) {
-        console.log('[/addleave] error:', e.message, e.stack);
+        console.log('[/addduty] error:', e.message, e.stack);
         ctx.body = {
             status: e.code || -1,
             body: e.message
@@ -367,7 +367,7 @@ router.post('/addDuty', async(ctx, next) => {
 router.post('/addLeave', async(ctx, next) => {
 
     try {
-        const {isPass,inputLeaveStart,inputLeaveEnd} =  ctx.request.body;
+        const {isPass,inputLeaveStart,inputLeaveEnd,inputReason} =  ctx.request.body;
         const userId =  ctx.cookies.get('userId')
 
         let consumingHours = moment.duration(moment(inputLeaveEnd).valueOf()- moment(inputLeaveStart).valueOf()).as('hours');
@@ -380,6 +380,7 @@ router.post('/addLeave', async(ctx, next) => {
             time:consumingHours,
             start:inputLeaveStart,
             end:inputLeaveEnd,
+            reason:inputReason,
             isPass:false,
             IsDelete:false,
             include: [
@@ -428,6 +429,7 @@ router.post('/addLeave', async(ctx, next) => {
                  <th style="width: 200px;text-align: center">开始时间</th>
                  <th style="width: 200px;text-align: center">结束时间</th>
                  <th style="width: 200px;text-align: center">时长</th>
+                 <th style="width: 200px;text-align: center">请假原因</th>
               </tr>
               <tr>
                 <td style="width: 150px;text-align: center">${user.username}</td>
@@ -435,6 +437,7 @@ router.post('/addLeave', async(ctx, next) => {
                 <td style="width: 200px;text-align: center">${moment(new Date(inputLeaveStart)).format("YYYY-MM-DD HH:mm:ss")}</td>
                 <td style="width: 200px;text-align: center">${moment(new Date(inputLeaveEnd)).format("YYYY-MM-DD HH:mm:ss")}</td>
                 <td style="width: 200px;text-align: center">${consumingHours}小时</td>
+                <td style="width: 200px;text-align: center">${inputReason}</td>
               </tr>
             </table>`, // html body
         };

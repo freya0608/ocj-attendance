@@ -32,6 +32,9 @@ const Leave = sequelize.define('leave',{
 		type:Sequelize.BOOLEAN,
 		defaultValue:0
 	},
+	reason:{
+		type: Sequelize.STRING,
+	},
 
 },{
 	tableName:'leave',
