@@ -63,21 +63,21 @@ router.get('/userInfo', async(ctx, next) => {
             where :{
                 userId:userId,
                 IsDelete:0,
-                isPass:1
+                // isPass:1
             },
         });
         let timeDutyCount = await Duty.sum('time',{
             where :{
                 userId:userId,
                 IsDelete:0,
-                isPass:1
+                // isPass:1
             },
         });
         let timeLeaveCount = await Leave.sum('time',{
             where :{
                 userId:userId,
                 IsDelete:0,
-                isPass:1
+                // isPass:1
             },
         });
         let userInfo = await User.findOne({
